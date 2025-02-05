@@ -1,7 +1,12 @@
-import re 
+import re
 
-problem = "010-9501-1650"
-p = re.compile("(\d{3})[-](\d{4})[-]\d{4}")
-print(p.sub("\g<1>-\g<2>-****",problem))
+text = " 37 rip vip voice 3 is voshg 9 2 opqrstu"
+n_p = re.compile(r'\d+')
+
+cleanText = re.sub(r'\s+','',text)
+
+nums = re.findall(n_p,cleanText)
+print(nums)
+
 
 

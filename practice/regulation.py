@@ -13,11 +13,17 @@ print(nums)
 
 
 
-textList = ["1995-08-09", "1998-08-30", "2000-12-19", "1997-06-17"]
+textList = ["1999-08-09", "1998-08-30", "2000-12-19", "1997-06-17"]
 
 # 1998년 1월 1일 이후의 날짜를 찾기 위한 정규 표현식
-pattern = r'^(199[8]|200[0-9]|20[1-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+pattern = r'^(199[8-9]|200[0-9]|20[1-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
 
 # 필터링
 filtered_list = [date for date in textList if re.match(pattern, date)]
 print(filtered_list)
+
+
+pp = re.sub('[0-9]+', lambda m: str(int(m.group())*10), '1 2 Fizz 4 Buzz Fizz 7 8')
+test = re.sub('[a-z]+', lambda m: (m.group()).upper(), '1 2 Fizz 4 Buzz Fizz 7 8')
+print(pp)
+print(test)

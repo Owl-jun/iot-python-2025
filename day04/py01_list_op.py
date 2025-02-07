@@ -20,6 +20,7 @@ arr.insert(2,3) ## insert 자리채우고 -> 땡겨
 print(arr)
 
 ## 리스트 합칠 때
+## 확장. 요소 자체가 리스트일 때, append는 리스트 자체가 들어가지만, extend는 요소인 리스트의 요소들이 하나씩 들어간다.
 lst1.extend(lst2)
 print(lst1)
 

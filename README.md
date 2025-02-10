@@ -170,7 +170,9 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
             - 모바일 특화로 멀티플랫폼 지원
             - 가장 어렵다
 
-
+    - 토이 프로젝트
+        - tkinter 활용한 색칠놀이
+        
     - 챗GPT 윈도우앱(tkinter) 만들기
     
     - PyQt 학습

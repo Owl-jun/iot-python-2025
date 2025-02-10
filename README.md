@@ -140,8 +140,13 @@ iot 개발자 기초 프로그래밍 언어 리포지토리
         - My Movie List 앱 수정, 마무리
             - 예외처리 : 입력시 바로 엔터, 입력시 4개의 아이템을 입력하지 않으면, 예외발생
             - 화면편집 : 검색이나 출력시 데이터 수 표시
-
             
+            
+
+            https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
+
+
+  
         - 챗GPT 윈도우앱(tkinter) 만들기
 
     - 주피터 노트북 학습

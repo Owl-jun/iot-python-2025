@@ -187,6 +187,7 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 <!-- 주석-->
 <!-- html에서 사용하는 <img> 태그로 캡처한 이미지를 추가 -->
 <!-- ![py05_tkinter_widget](./image/py05_tkinter_widget.png)  : 이런 방법도 있다~ -->
+    - py05_tkinter_widget.py 출력본 캡쳐
 <img src="./image/py05_tkinter_widget.png" width="400">
 
     - 토이 프로젝트
@@ -197,9 +198,6 @@ https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
         
     - 챗GPT 윈도우앱(tkinter) 만들기
     
-    - PyQt 학습
-    - 토이프로젝트
-        - 윈도우앱(PyQt) 
     
     
 

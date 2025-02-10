@@ -172,6 +172,9 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 
     - 토이 프로젝트
         - tkinter 활용한 색칠놀이
+
+https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
+
         
     - 챗GPT 윈도우앱(tkinter) 만들기
     

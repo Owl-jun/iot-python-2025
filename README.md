@@ -150,6 +150,8 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
         - Ctrl + Shift + P(명령 팔레트) 에서 시작
             - Create: 새 Jupyter 노트북 클릭
             - 무조건 저장 먼저 (.ipynb)
+        - GUI 학습에는 불합리
+        - 빅데이터분석, 머신러닝, 딥러닝 많이 활용
 
     - GUI 학습(tkinter)
         - GUI (Graphic User Interface) : 그래픽 사용자 인터페이스
@@ -160,7 +162,7 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
             - 화려한 UI구성
             - 코딩 다양성
             - 조금 어렵다(파이썬 코드와 분리가능)
-            - Qt가 라이선스를 구매해야함, 프리웨어로 변경한게 PySide
+            - Qt는 라이선스를 구매해야함, 프리웨어로 변경한게 PySide
         2. tkinter : 파이썬에 내장된 GUI 라이브러리
             - 아주 단순하여 학습이 쉬움
             - 파이썬 기본 내장
@@ -170,8 +172,25 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
             - 모바일 특화로 멀티플랫폼 지원
             - 가장 어렵다
 
+    - Tkinter 학습
+        - 기본 템플릿
+
+        ```python
+        from tkinter import *
+        root = Tk()
+        # 이 사이에 위젯, 이벤트 등 작성
+        # Label, Button, Entry, Radiobutton
+        # Checkbutton, Listbox, Frame 등 ...
+        # 위젯.pack() 혹은 grid() 필수!
+        root.mainloop()
+        ```
+<!-- 주석-->
+<!-- html에서 사용하는 <img> 태그로 캡처한 이미지를 추가 -->
+![py05_tkinter_widget](./image/py05_tkinter_widget.png)
+<img src="./image/py05_tkinter_widget.png" width="400">
+
     - 토이 프로젝트
-        - tkinter 활용한 색칠놀이
+        - tkinter 활용한 색칠놀이 (py99_tkinter_changeColor.py)
 
 https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
 

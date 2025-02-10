@@ -97,7 +97,6 @@ class WhackAMole:
                 score = r.readline().replace('\n','')
                 if not score: break
                 scoreList.append(int(score))
-            sorted(scoreList)
         return max(scoreList)
 
 if __name__ == "__main__":

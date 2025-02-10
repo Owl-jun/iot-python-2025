@@ -186,7 +186,7 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
         ```
 <!-- 주석-->
 <!-- html에서 사용하는 <img> 태그로 캡처한 이미지를 추가 -->
-![py05_tkinter_widget](./image/py05_tkinter_widget.png)
+<!-- ![py05_tkinter_widget](./image/py05_tkinter_widget.png)  : 이런 방법도 있다~ -->
 <img src="./image/py05_tkinter_widget.png" width="400">
 
     - 토이 프로젝트

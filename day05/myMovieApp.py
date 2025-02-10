@@ -17,7 +17,7 @@ def run():
     movieList = []
 
     load_movie(movieList)
-        
+
     while True :
         menu = set_menu()
         if menu == 1:                                               # 영화 입력
@@ -63,14 +63,17 @@ def del_movie(items : list):
 def search_movie(items : list):
     s_name = input("검색어를 입력하세요 (제목) : ")
     p = re.compile(f'{s_name}+',re.I)
+    count = 0
     try:
         idx = []
         for movie in items:
-            if p.search(movie.get_title()): idx.append(items.index(movie)) # 이름이 포함되어 있다면 검색가능한 버전
+            if p.search(movie.get_title()): 
+                idx.append(items.index(movie)) # 이름이 포함되어 있다면 검색가능한 버전
+                count += 1
         # idx = [index for index, value in enumerate(items) if value.get_title() == s_name] // 완전히 일치할 상황에만 검색가능한 버젼
         print()
         print('------------------------------')
-        print(f'검색 값 \'{s_name}\' 으로 검색된 영화 입니다.')
+        print(f'검색 값 \'{s_name}\' 으로 검색된 영화 입니다. 검색 데이터 수 {count}개')
         for i in idx: print(items[i])
         print('------------------------------')
         print()
@@ -95,6 +98,7 @@ def get_movie(items: list):
         print(f'{items.index(i)+1}.\n{i}')
         print('------------------------------')
         print()
+    print(f'검색된 데이터 수 {len(items)} 개')
 
 ## 영화 입력
 def set_movie():

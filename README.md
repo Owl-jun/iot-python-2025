@@ -143,7 +143,7 @@ iot 개발자 기초 프로그래밍 언어 리포지토리
             
             
 
-            https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
+https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 
 
   

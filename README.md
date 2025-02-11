@@ -188,7 +188,7 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 <!-- 주석-->
 <!-- html에서 사용하는 <img> 태그로 캡처한 이미지를 추가 -->
 <!-- ![py05_tkinter_widget](./image/py05_tkinter_widget.png)  : 이런 방법도 있다~ -->
-    - py05_tkinter_widget.py 출력본 캡쳐
+- py05_tkinter_widget.py 출력본 캡쳐
 <img src="./image/py05_tkinter_widget.png" width="400">
 
 - 토이 프로젝트
@@ -205,12 +205,13 @@ https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
     
 ## 7일차
 - 파이썬 응용
-    - 챗GPT 윈도우앱(tkinter) 만들기
-    - 파이썬 응용
-        - 챗GPT 클론 제미나이 활용
+    - 챗GPT 클론 제미나이 활용
     - 실습
         - 제미나이 챗 앱 -> **클래스로 변경**
-    
+
+https://github.com/user-attachments/assets/0724ce2b-d497-4671-bea7-f05c403f816b
+
+- 파이썬 응용
     - 실행파일 만들기
         - `pyinstaller` 모듈 설치
             - pip install pyinstaller
@@ -220,8 +221,6 @@ https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
             - pyinstaller --onefile --noconsole 파이썬파일명
             - 아이콘 등의 리소스를 dist 폴더에 복사해야
 
-
-https://github.com/user-attachments/assets/0724ce2b-d497-4671-bea7-f05c403f816b
 
 
 

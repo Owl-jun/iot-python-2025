@@ -144,6 +144,7 @@ iot 개발자 기초 프로그래밍 언어 리포지토리
 
 https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 
+- 파이썬 응용
     - 주피터 노트북 기본사용법
         - 파이썬을 사용한 연구를 목적으로하는 리포트 작성에 특화된 기술
         - 주피터 프로젝트에서 나온 결과물
@@ -190,12 +191,12 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
     - py05_tkinter_widget.py 출력본 캡쳐
 <img src="./image/py05_tkinter_widget.png" width="400">
 
-    - 토이 프로젝트
-        - tkinter 활용한 색칠놀이 (py99_tkinter_changeColor.py)
+- 토이 프로젝트
+    - tkinter 활용한 색칠놀이 (py99_tkinter_changeColor.py)
 
 https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
-
-        - 두더지 잡기 게임 (WhackAMole)
+- 토이프로젝트
+    - 두더지 잡기 게임 (WhackAMole)
       
 https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
 
@@ -203,6 +204,7 @@ https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
     
     
 ## 7일차
+- 파이썬 응용
     - 챗GPT 윈도우앱(tkinter) 만들기
     - 파이썬 응용
         - 챗GPT 클론 제미나이 활용

@@ -191,17 +191,7 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 - py05_tkinter_widget.py 출력본 캡쳐
 <img src="./image/py05_tkinter_widget.png" width="400">
 
-- 토이 프로젝트
-    - tkinter 활용한 색칠놀이 (py99_tkinter_changeColor.py)
-
-https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
-- 토이프로젝트
-    - 두더지 잡기 게임 (WhackAMole)
-      
-https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
-
-
-    
+   
     
 ## 7일차
 - 파이썬 응용

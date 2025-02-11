@@ -1,59 +1,66 @@
+# 두더지 잡기
+    ##### 해결해야할 문제   1. 게임 시작 -> 클릭 -> 게임 중단 반응형 버튼 구현.     #####
+    #####                   2. 게임 시작 버튼을 여러번 누르면 시간초가 빠르게 흐름  ##### 
+
+
 from tkinter import *
 import random
 
-RES = "900x1055"
-WIDTH = 300
-HEIGHT = 300
+# define
+FWIDTH = 750
+FHEIGHT = 900
+RES = f"{FWIDTH}x{FHEIGHT}"
+WIDTH = 250
+HEIGHT = 250
 BORDER = 2
-LIMIT = 10
+LIMIT = 15
 
-class WhackAMole:
-    def __init__(self, main):
-
+class WhackAMole(Tk):
+    def __init__(self):
+        super().__init__()
         # 제목설정 및 기초작업
         self.top = self.loadScore()
-        self.main = main
-        self.main.title("두더지 잡기 게임")
-        self.main.geometry(RES)
+        self.title("두더지 잡기 게임")
+        self.geometry(RES)
+        
+        # 스코어 및 시간제한 관련 --------------
+        self.score = 0
+        self.time_left = LIMIT
 
         # 두더지가 나올 틀(배경)을 Frame 으로 만들기 3X3 배열
         self.frameList = []
         for i in range(9):
-            self.frame = Frame(main,border=BORDER,relief="ridge",width=WIDTH,height=HEIGHT)
+            self.frame = Frame(self,border=BORDER,relief="ridge",width=WIDTH,height=HEIGHT)
             self.frameList.append(self.frame)
         for j in range(3):
             for k in range(3):
                 self.index = j*3+k      #j = row , k = col
                 self.frameList[self.index].place(x=WIDTH*k,y=HEIGHT*j)
         
-        # 스코어 및 시간제한 관련 --------------
-        self.score = 0
-        self.time_left = 30
-        
         # 위젯 --------------------------------
-        self.high_score = Label(main, text=f'현재 1등 점수 : {self.top}', font = ("Arial",24))
+        self.high_score = Label(self, text=f'현재 1등 점수 : {self.top}', font = ("Arial",18))
         self.high_score.pack()
         self.high_score.place(x=WIDTH*2,y=HEIGHT*3)
 
-        self.del_score_button = Button(main, text="랭킹 초기화",command=self.delScore, font=("Arial", 24))
+        self.del_score_button = Button(self, text="랭킹 초기화",command=self.delScore, font=("Arial", 24))
         self.del_score_button.pack()
         self.del_score_button.place(x=WIDTH*2,y=HEIGHT*3+48)
 
-        self.score_label = Label(main, text="점수: 0", font=("Arial", 24))
+        self.score_label = Label(self, text="점수: 0", font=("Arial", 24))
         self.score_label.pack(side="bottom")
         
-        self.time_label = Label(main, text=f"남은 시간: {LIMIT}", font=("Arial", 24))
+        self.time_label = Label(self, text=f"남은 시간: {LIMIT}", font=("Arial", 24))
         self.time_label.pack(side="bottom")
         
-        self.start_button = Button(main, text="게임 시작", command=self.start_game, font=("Arial", 24))
+        self.start_button = Button(self, text="게임 시작", command=self.start_game, font=("Arial", 24))
         self.start_button.pack(side="bottom")
 
-        self.end_label = Label(self.main,text='게임 종료!!',font=('Arial',48))
+        self.end_label = Label(self, text='게임 종료!!',font=('Arial',24))
         # ------------------------------------
 
         # 두더지 관련 설정
         self.mole_image = PhotoImage(file='.\day06\dudeoz.png')
-        self.mole_button = Button(main, image=self.mole_image, command=self.whack, width=WIDTH-(BORDER*2), height=HEIGHT-(BORDER*2))
+        self.mole_button = Button(self, image=self.mole_image, command=self.whack, width=WIDTH-(BORDER*2), height=HEIGHT-(BORDER*2))
 
         self.is_game_active = False
     
@@ -80,7 +87,7 @@ class WhackAMole:
             self.score += 1
             self.update_score()
             self.mole_button.place_forget()  # 두더지 잠시 치워버리기
-            self.main.after(random.randint(0,10) * 200, self.move_mole)  # 0.2초 * 0~10 초 중 무작위의 시간 후에 두더지가 나타남
+            self.after(random.randint(0,10) * 200, self.move_mole)  # (0.2초 * 0~10) 초 중 무작위의 시간 후에 두더지가 나타남
 
     # *** 두더지 랜덤 배치 함수 ***
     def move_mole(self):
@@ -91,13 +98,16 @@ class WhackAMole:
             self.mole_button.place(x = _x, y = _y)
 
     # *** 시간 & 게임종료 관련 ***
-    ##### 해결해야할 문제 1. 게임시작 후 또 게임시작을 누르면 시간이 빠르게간다. #####
     def countdown(self):
         if self.time_left > 0 and self.is_game_active:
             self.time_left -= 1
             self.update_time()
-            self.main.after(1000, self.countdown)
+            self.after(1000, self.countdown)
         else:   # 게임 종료
+            self.game_over()
+
+    def game_over(self):
+
             self.is_game_active = False
             self.mole_button.place_forget()
             self.time_label.config(text="게임 종료!")
@@ -110,8 +120,7 @@ class WhackAMole:
                 # 스코어 기록
             with open('./day06/score.txt',mode='a',encoding='utf-8') as f:
                 f.write(f'{self.score}\n')
-            self.update_highScore()
-            
+            self.update_highScore()        
     
     # 스코어 기록된 텍스트파일에서 하이스코어 가져오기
     def loadScore(self):
@@ -136,6 +145,5 @@ class WhackAMole:
 # --------------------------------------
 
 if __name__ == "__main__":
-    root = Tk()
-    WhackAMole(root)
+    root = WhackAMole()
     root.mainloop()

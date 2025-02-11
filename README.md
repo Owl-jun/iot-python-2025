@@ -195,11 +195,17 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 
 https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
 
+        - 두더지 잡기 게임 (WhackAMole)
         
+    
+    
+    
+## 7일차
     - 챗GPT 윈도우앱(tkinter) 만들기
-    
-    
-    
+    - 파이썬 응용
+        - 챗GPT 클론 제미나이 활용
+    - 실습
+        - 제미나이 챗 앱 -> 클래스로 변경
 
 
 

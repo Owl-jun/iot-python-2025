@@ -196,8 +196,10 @@ https://github.com/user-attachments/assets/bdbd9567-3485-4370-a4ad-76f401f8cf82
 https://github.com/user-attachments/assets/d0117e0f-34ca-4816-a178-cc7ad7db17a0
 
         - 두더지 잡기 게임 (WhackAMole)
-        
-    
+      
+https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
+
+
     
     
 ## 7일차

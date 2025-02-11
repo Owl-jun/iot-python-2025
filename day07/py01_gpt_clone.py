@@ -49,7 +49,8 @@ def onClosing():
 root = Tk()
 root.title('제미나이 챗봇')
 root.geometry(f'{WIDTH}x{HEIGHT}')
-root.iconbitmap('./image/robot.ico')
+# ./image/ 경로는 삭제
+root.iconbitmap('./day07/robot.ico') # pyinstaller로 설치할 땐 해당폴더에 복사하고 경로설정
 
 # 6. 전체에서 사용할 폰트 지정 -> 나눔고딕
 myFont = Font(family='NanumGothic',size=10)

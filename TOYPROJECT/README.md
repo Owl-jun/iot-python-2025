@@ -13,4 +13,6 @@ https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
 - tkinter 활용 토이프로젝트 모음
     - 숫자 퍼즐 (py97_tkinter_NumberPuzzle.py)
 
+https://github.com/user-attachments/assets/64171d9d-cd96-4a59-b229-6d2f3193a358
+
 

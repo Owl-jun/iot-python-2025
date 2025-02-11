@@ -207,15 +207,20 @@ https://github.com/user-attachments/assets/36a64d2c-e454-49f4-8842-a404a0a237b5
     - 파이썬 응용
         - 챗GPT 클론 제미나이 활용
     - 실습
-        - 제미나이 챗 앱 -> 클래스로 변경
+        - 제미나이 챗 앱 -> **클래스로 변경**
     
     - 실행파일 만들기
-        - pyinstaller 모듈 설치
+        - `pyinstaller` 모듈 설치
         - > pip install pyinstaller
         - > pyinstaller --onefile python_file.py
         - 같이 실행되는 터미널을 제거하려면
         - > pyinstaller --onefile --noconsole 파이썬파일명
         - 아이콘 등의 리소스를 dist 폴더에 복사해야
+
+
+https://github.com/user-attachments/assets/0724ce2b-d497-4671-bea7-f05c403f816b
+
+
 
 
 

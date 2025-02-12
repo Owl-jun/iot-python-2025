@@ -219,9 +219,12 @@ https://github.com/user-attachments/assets/0724ce2b-d497-4671-bea7-f05c403f816b
         - 이벤트 처리
         - 간단한 게임
         - 이미지, 사운드 등 리소스 활용 게임
+    
+    - 토이프로젝트
+        - 블록깨기 게임
+https://github.com/user-attachments/assets/39483028-3618-493f-9c70-de13c9f05780
 
-
-
+- 파이썬 응용
 
 
 

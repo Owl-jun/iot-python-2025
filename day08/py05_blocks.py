@@ -147,7 +147,7 @@ def main():
                 i.draw_R()
 
         pygame.display.update()                       # 화면 업데이트
-        FPSCLOCK.tick(30)                           # 30 FPS 지정 (프레임 고정 방식)
+        FPSCLOCK.tick(120)                           # 30 FPS 지정 (프레임 고정 방식)
         
 
 if __name__ == "__main__":

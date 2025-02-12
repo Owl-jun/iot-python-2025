@@ -3,14 +3,31 @@
 
 import pygame                   
 import sys                      
+import random
+import math
 
 # define
 FWIDTH = 1000
 FHEIGHT = 800
-LEFTCLICK = 1
-WHEELCLICK = 2
-RIGHTCLICK = 3
-SPEED = 200
+
+
+class Block:
+    def __init__(self,col,rect,speed = 0):
+        self.col = col
+        self.rect = rect
+        self.speed = speed
+        self.dir = random.randint(-45,45) + 270
+    
+    def move(self):
+        # 볼이 움직이는 x축 값을 계속 계산하려면 x는 
+        self.rect.centerx += math.cos(math.radians(self.dir)) * self.speed
+        self.rect.centery -= math.sin(math.radians(self.dir)) * self.speed
+
+    def draw_E(self):   # 공을 circle이 아니라 ellipse로 생성 (콜리젼 계산편함)
+        pygame.draw.ellipse(Surface,self.col,self.rect)
+    
+    def draw_R(self):   
+        pygame.draw.rect(Surface,self.col, self.rect)
 
 # 환경설정
 pygame.init()
@@ -19,14 +36,19 @@ FPSCLOCK = pygame.time.Clock()
 pygame.display.set_caption('Pygame Blocks!!')          
 pygame.key.set_repeat(10,10)
 
-
 def main():
     is_game_start = False
     score = 0
     BLOCK = []
+    BALL = Block((200,200,0),pygame.Rect(375,650,20,20),10)
     # 클래스 생성
     # 무지개색 정보
     colors = [(255,0,0),(255,150,0),(255,228,0),(11,201,4),(0,80,255),(0,0,147),(201,0,167)]
+
+    # 초기에 생성될 블럭 모양
+    for y, color in enumerate(colors):
+        for x in range(9):
+            BLOCK.append(Block(color,pygame.Rect(x * 80 + 150, y * 40 + 40, 60, 20)))
 
     bigFont = pygame.font.SysFont('NanumGothic', 80)
     smallFont = pygame.font.SysFont('NanumGothic', 45)
@@ -36,6 +58,7 @@ def main():
     M_FAIL = bigFont.render('FAILED',True,'red')
 
     while True:
+        # 스코어, 스피드 글자.
         dt = FPSCLOCK.tick(60) / 1000               # deltatime 설정
         Surface.fill((0,0,0))                 # #FFFFFF
     
@@ -57,7 +80,21 @@ def main():
             Surface.blit(M_GAME_TITLE,((FWIDTH/2)-(537/2),(FHEIGHT/2)-72))
             Surface.blit(M_GAME_SUBTITLE,((FWIDTH/2)-(390/2),(FHEIGHT/2)+50))
         else: # 게임시작 후 블록을 다 그리고 볼이 움직이도록 처리, 바 도 움직이도록 처리
-            Surface.blit(M_CLEAR,(80,280))
+            LenBlock = len(BLOCK) # 63
+            # BLOCK = [x for x in BLOCK]
+
+            if BALL.rect.centery < 1000:
+                BALL.move()
+            if BALL.rect.centerx < 0 or BALL.rect.centerx > FWIDTH:
+                BALL.dir = 180 - BALL.dir
+            elif BALL.rect.centery < 0:
+                BALL.dir = -BALL.dir
+            
+            BALL.draw_E()
+
+            for i in BLOCK:
+                i.draw_R()
+
         pygame.display.update()                       # 화면 업데이트
         FPSCLOCK.tick(30)                           # 30 FPS 지정 (프레임 고정 방식)
         

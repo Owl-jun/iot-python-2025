@@ -149,9 +149,9 @@ class MyPuzzle(Tk):
         self.update_Button()
 
         if list(self.dict.values()) == self.clear :
-            for i in self.ButtonList:
-                i.grid_forget()
-            self.clearButton = Button(self,text = '클리어!').grid(column=0,row=1,columnspan=3)
+            # for i in self.ButtonList:
+                # i.grid_forget()
+            self.clearButton = Button(self,text = '클리어!',font=('Arial',72)).grid(column=0,row=1,columnspan=3)
 
 
 

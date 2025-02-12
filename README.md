@@ -222,11 +222,15 @@ https://github.com/user-attachments/assets/0724ce2b-d497-4671-bea7-f05c403f816b
     
     - 토이프로젝트
         - 블록깨기 게임
-        - 공의 x축 방향 계산방법 : $x = r\cdot \cos \theta$
-        - 공의 y축 방향 계산방법 : $y = r\cdot \sin \theta$
-          
+        - 공의 로테이션에 대한 수식 
+            - 공의 x축 방향 계산방법 : $x = r\cdot \cos \theta$
+            - 공의 y축 방향 계산방법 : $y = r\cdot \sin \theta$
+        - 공의 시작방향, 경계부분 문제 해결, 종료 후 다시 시작 로직 처리
+
+## 9일차
+- 코딩 테스트
+
 <!--$\frac{x}{y}$-->
-        
 https://github.com/user-attachments/assets/39483028-3618-493f-9c70-de13c9f05780
 
 - 파이썬 응용

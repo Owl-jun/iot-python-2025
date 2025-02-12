@@ -5,7 +5,6 @@ import pygame
 import sys                      
 import random
 import math
-import time
 
 # define
 FWIDTH = 1000
@@ -46,7 +45,6 @@ def main():
 
     # 초기에 생성될 블럭 모양
 
-
     bigFont = pygame.font.SysFont('NanumGothic', 80)
     smallFont = pygame.font.SysFont('NanumGothic', 45)
     M_GAME_TITLE = bigFont.render('GAME START?', True , 'white')
@@ -54,6 +52,7 @@ def main():
     M_CLEAR = bigFont.render('CLEAR!!',True,'yellow')
     M_FAIL = bigFont.render('FAILED',True,'red')
     fail_time = None
+
     while True:
         # 스코어, 스피드 글자.
         dt = FPSCLOCK.tick(60) / 1000               # deltatime 설정
@@ -81,15 +80,15 @@ def main():
 
         # 게임화면 렌더링
         if is_game_start == False:
-
+            level = 0
             for y, color in enumerate(colors):
-                for x in range(9):
+                for x in range(9+level):
                     BLOCK.append(Block(color,pygame.Rect(x * 80 + 150, y * 40 + 40, 60, 20)))
 
             Surface.blit(M_GAME_TITLE,((FWIDTH/2)-(537/2),(FHEIGHT/2)-72))
             Surface.blit(M_GAME_SUBTITLE,((FWIDTH/2)-(390/2),(FHEIGHT/2)+50))
 
-            BALL = Block((200,200,0),pygame.Rect(375,500,20,20),20)
+            BALL = Block((200,200,0),pygame.Rect(375,500,20,20),15)
             PADDLE = Block((200,200,0),pygame.Rect(375,700,100,30))
             score = 0
 
@@ -108,7 +107,7 @@ def main():
                 
             if len(BLOCK) != LenBlock:
                 BALL.dir = -BALL.dir
-                BALL.speed += 1
+                BALL.speed += 0.25
                 score += 1
 
             if BALL.rect.centery < 1000:
@@ -121,25 +120,25 @@ def main():
             
             if BALL.rect.centery > 800:
                 Surface.blit(M_FAIL,((FWIDTH/2)-(270/2),(FHEIGHT/2)-72))
-                # 타이머가 아직 설정되지 않았다면 현재 시간 저장
                 if fail_time is None:
                     fail_time = pygame.time.get_ticks()  # 현재 시간 기록
 
                 # fail_time이 설정된 경우, 3초 후 is_game_start를 False로 변경
                 if fail_time is not None and pygame.time.get_ticks() - fail_time > 3000:
                     is_game_start = False
-                    fail_time = None  # 타이머 초기화
+                    fail_time = None 
 
             
             if len(BLOCK) == 0:
                 Surface.blit(M_CLEAR,((FWIDTH/2)-(270/2),(FHEIGHT/2)-72))
+                level += 1
                 if fail_time is None:
                     fail_time = pygame.time.get_ticks()  # 현재 시간 기록
                 # fail_time이 설정된 경우, 3초 후 is_game_start를 False로 변경
                 if fail_time is not None and pygame.time.get_ticks() - fail_time > 3000:
                     is_game_start = False
                     fail_time = None  # 타이머 초기화
-                is_game_start = False
+
 
 
             BALL.draw_E()

@@ -16,13 +16,16 @@ class Board():
         self.image = pygame.image.load('./TOYPROJECT/py96_bg.webp')
         self.image.set_alpha(60)
         self.create_steps()
+    
+    get_positions =  lambda self : self.positions
+    get_special_steps = lambda self : self.special_steps
    
     def create_steps(self):
         self.backPanel = pygame.Rect((S_WIDTH/2) - ((80*5.5)/2)-30, 20,500,500)
         grid_size = 80  # 발판 간격 설정
         start_x, start_y = (S_WIDTH/2) - ((grid_size*5.5)/2), 50
 
-        positions = [
+        self.positions = [
             # 네모 발판 좌표
             (5,5), (5,4), (5,3), (5,2), (5,1), (5,0),
             (4,0), (3,0), (2,0), (1,0), (0,0), (0,1),
@@ -32,7 +35,7 @@ class Board():
             (4,1), (3.2,1.8), (2.5,2.5), (1.8,3.2), (1,4), (1,1), (1.8,1.8), (3.2,3.2), (4,4)
         ]
 
-        for x, y in positions:
+        for x, y in self.positions:
             rect = pygame.Rect(start_x + (x * grid_size), start_y + (y * grid_size), 40, 40)
             self.steps.append(rect)
 
@@ -94,13 +97,19 @@ class Pawn():
             screen.blit(pawn,(start,start + i * grid))
             i += 1
 
+    def move(self,trigger):
+        moveDistance = 0
+        
+    
+
 class Yut():
     def __init__(self):
         self.i, self.grid, self.start = 0, 60, 90
         self.create_Yut()
-        self.resultT = ''
-        self.resultFont = pygame.font.SysFont('Arial',48)
+        self.resultFont = pygame.font.SysFont('malgungothic',24)
         
+    get_resultT = lambda self : self.resultT
+
     def create_Yut(self):
         self.YutBackPlate = pygame.Surface((400,150),pygame.SRCALPHA)
         self.YutBackPlate.fill((150,50,150,128))
@@ -109,14 +118,17 @@ class Yut():
         for i in range(4):
             self.YutFront = pygame.image.load('TOYPROJECT\yutFront.png')
             self.YutFronts.append(self.YutFront)
+        for j in range(3):
             self.YutBack = pygame.image.load('TOYPROJECT\yutBack.png')
             self.YutBacks.append(self.YutBack)
-    
+        self.YutBackDo = pygame.image.load('TOYPROJECT\yutBackDo.png')
+        
     def draw(self,screen):
         screen.blit(self.YutBackPlate,(S_WIDTH/2-200,520))
    
     def shaking(self):
-        self.temp = self.YutFronts + self.YutBacks
+        self.temp = self.YutFronts + self.YutBacks 
+        self.temp.append(self.YutBackDo)
         random.shuffle(self.temp)
         self.result = self.temp[:4]
         y = 37
@@ -127,8 +139,11 @@ class Yut():
             self.i += 1
         self.i = 0
            
-    def showresult(self, sc, isShaking=True):
+    def showresult(self, isShaking=True):
+        self.resultT = ''
+        self.isBackDo = False
         self.temp = self.YutFronts + self.YutBacks
+        self.temp.append(self.YutBackDo)
         self.Fcount = 0
         self.Bcount = 0
         
@@ -139,7 +154,6 @@ class Yut():
             self.result = self.temp[:4]
 
         self.YutBackPlate.fill((0, 0, 0, 0))
-
         for idx, Yut in enumerate(self.result):
             x_pos = self.start + idx * self.grid
             y_pos = 37
@@ -147,25 +161,29 @@ class Yut():
                 self.Fcount += 1
             elif Yut in self.YutBacks:
                 self.Bcount += 1
+            elif Yut == self.YutBackDo:
+                self.Bcount += 1
+                self.isBackDo = True
             self.YutBackPlate.blit(Yut, (x_pos, y_pos))
 
-        # 윷 결과를 결정하는 로직
-        if self.Bcount == 1:
-            self.resultT = '도'
-        elif self.Bcount == 2:
-            self.resultT = '개'
-        elif self.Bcount == 3:
-            self.resultT = '걸'
-        elif self.Bcount == 4:
-            self.resultT = '모'
-        elif self.Fcount == 4:
-            self.resultT = '윷'
+        if isShaking:
+            if self.Bcount == 1:
+                self.resultT = '도!'
+            elif self.Bcount == 2:
+                self.resultT = '개!'
+            elif self.Bcount == 3:
+                self.resultT = '걸!'
+            elif self.Bcount == 4:
+                self.resultT = '모!'
+            elif self.Fcount == 4:
+                self.resultT = '윷!'
+            if self.Bcount == 1 and self.isBackDo:
+                self.resultT = '백도!'
+        else:
+            self.resultT = ''
 
-        # 🔹 텍스트 업데이트 (새로 렌더링)
-        self.resultText = self.resultFont.render(self.resultT, True, 'white')
-
-        # 🔹 화면에 텍스트 출력
-        sc.blit(self.resultText, (600, 700))  # 화면 중앙 하단에 출력
+        self.resultText = self.resultFont.render(f'{self.resultT}', True, 'white','black')
+        self.YutBackPlate.blit(self.resultText, (180, 0))
     
         
 
@@ -194,7 +212,7 @@ def run():
                 spon = False
             elif event.type == pygame.MOUSEBUTTONUP:
                 is_shaking = False
-                YUT.showresult(screen)
+                YUT.showresult()
                 
         # RENDER YOUR GAME HERE
         screen.fill((0,0,0))
@@ -205,11 +223,14 @@ def run():
         YUT.draw(screen)
 
         if spon:
-            YUT.showresult(screen,is_shaking)
+            YUT.showresult(False)
 
         if pygame.mouse.get_pressed()[0]:
             YUT.shaking()
         
+        if YUT.get_resultT != '':
+            PAWN.move(YUT.get_resultT)
+
         FPS.tick(15)
         pygame.display.flip()
         deltaTime = FPS.tick(60) / 1000

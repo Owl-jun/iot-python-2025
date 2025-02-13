@@ -2,9 +2,11 @@
 
 import pygame
 import sys
+import random
 
 S_WIDTH = 1280
 S_HEIGHT = 800
+SPEED = 100
 
 class Board():
     def __init__(self):
@@ -94,9 +96,14 @@ class Pawn():
 
 class Yut():
     def __init__(self):
+        self.i, self.grid, self.start = 0, 60, 90
         self.create_Yut()
-    
+        self.resultT = ''
+        self.resultFont = pygame.font.SysFont('Arial',48)
+        
     def create_Yut(self):
+        self.YutBackPlate = pygame.Surface((400,150),pygame.SRCALPHA)
+        self.YutBackPlate.fill((150,50,150,128))
         self.YutFronts = []
         self.YutBacks = []
         for i in range(4):
@@ -104,6 +111,63 @@ class Yut():
             self.YutFronts.append(self.YutFront)
             self.YutBack = pygame.image.load('TOYPROJECT\yutBack.png')
             self.YutBacks.append(self.YutBack)
+    
+    def draw(self,screen):
+        screen.blit(self.YutBackPlate,(S_WIDTH/2-200,520))
+   
+    def shaking(self):
+        self.temp = self.YutFronts + self.YutBacks
+        random.shuffle(self.temp)
+        self.result = self.temp[:4]
+        y = 37
+        self.YutBackPlate.fill((0,0,0))
+        for Yut in self.result:
+            power = random.randint(-20,20)
+            self.YutBackPlate.blit(Yut,(self.start + self.i * self.grid,y+power))
+            self.i += 1
+        self.i = 0
+           
+    def showresult(self, sc, isShaking=True):
+        self.temp = self.YutFronts + self.YutBacks
+        self.Fcount = 0
+        self.Bcount = 0
+        
+        if isShaking:
+            random.shuffle(self.temp)
+            self.result = self.temp[:4]
+        else:
+            self.result = self.temp[:4]
+
+        self.YutBackPlate.fill((0, 0, 0, 0))
+
+        for idx, Yut in enumerate(self.result):
+            x_pos = self.start + idx * self.grid
+            y_pos = 37
+            if Yut in self.YutFronts:
+                self.Fcount += 1
+            elif Yut in self.YutBacks:
+                self.Bcount += 1
+            self.YutBackPlate.blit(Yut, (x_pos, y_pos))
+
+        # 윷 결과를 결정하는 로직
+        if self.Bcount == 1:
+            self.resultT = '도'
+        elif self.Bcount == 2:
+            self.resultT = '개'
+        elif self.Bcount == 3:
+            self.resultT = '걸'
+        elif self.Bcount == 4:
+            self.resultT = '모'
+        elif self.Fcount == 4:
+            self.resultT = '윷'
+
+        # 🔹 텍스트 업데이트 (새로 렌더링)
+        self.resultText = self.resultFont.render(self.resultT, True, 'white')
+
+        # 🔹 화면에 텍스트 출력
+        sc.blit(self.resultText, (600, 700))  # 화면 중앙 하단에 출력
+    
+        
 
 # pygame setup
 pygame.init()
@@ -111,22 +175,42 @@ screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
 pygame.display.set_caption('즐거운 윷놀이 게임')
 FPS = pygame.time.Clock()
 
+
 # 실행
 def run():
+    spon = True
+    is_shaking = False
     BOARD = Board()
     PLAYER = Player()
     PAWN = Pawn()
+    YUT = Yut()
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit(); sys.exit()
-        
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                is_shaking = True
+                spon = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                is_shaking = False
+                YUT.showresult(screen)
+                
         # RENDER YOUR GAME HERE
         screen.fill((0,0,0))
         BOARD.draw(screen)
         PLAYER.draw(screen)
         PAWN.draw(PLAYER.get_playerField(),PAWN.pPawns)
         PAWN.draw(PLAYER.get_computerField(),PAWN.cPawns)
+        YUT.draw(screen)
+
+        if spon:
+            YUT.showresult(screen,is_shaking)
+
+        if pygame.mouse.get_pressed()[0]:
+            YUT.shaking()
+        
+        FPS.tick(15)
         pygame.display.flip()
         deltaTime = FPS.tick(60) / 1000
 

@@ -16,8 +16,9 @@ class Board():
         self.create_steps()
    
     def create_steps(self):
+        self.backPanel = pygame.Rect((S_WIDTH/2) - ((80*5.5)/2)-30, 20,500,500)
         grid_size = 80  # 발판 간격 설정
-        start_x, start_y = (S_WIDTH/2) - ((grid_size*5.5)/2), 10
+        start_x, start_y = (S_WIDTH/2) - ((grid_size*5.5)/2), 50
 
         positions = [
             # 네모 발판 좌표
@@ -36,6 +37,7 @@ class Board():
     def draw(self, screen):
         count = 0
         highlight = [0,5,10,15,22]
+        pygame.draw.rect(screen,(50,50,50),self.backPanel)
         screen.blit(self.image,(0,0))
         for rect in self.steps:
             if count in highlight: self.color = (165,42,42)
@@ -55,7 +57,10 @@ class Player():
         self.player = pygame.Surface((xSize,ySize), pygame.SRCALPHA)
         self.player.fill((250,0,0,128))
         self.computer = pygame.Surface((xSize,ySize), pygame.SRCALPHA)
-        self.computer.fill((250,0,0,128))
+        self.computer.fill((100,30,150,128))
+
+    get_playerField = lambda self : self.player
+    get_computerField = lambda self : self.computer
 
     def draw(self,screen):
         self.pText = self.titleFont.render('PLAYER',True,'white')
@@ -68,6 +73,24 @@ class Player():
         pygame.draw.rect(screen, (255, 255, 255), (50, 100, 250, 400), 3)  # Player 
         pygame.draw.rect(screen, (255, 255, 255), (S_WIDTH - 300, 100, 250, 400), 3)  # Computer 
 
+class Pawn():
+    def __init__(self):
+        self.create_Pawn()
+
+    def create_Pawn(self):
+        self.pPawns = []
+        self.cPawns = []
+        for i in range(5):
+            self.pPawn = pygame.image.load('TOYPROJECT\py96_pPawn.png')
+            self.pPawns.append(self.pPawn)
+            self.cPawn = pygame.image.load('TOYPROJECT\py96_cPawn.png')
+            self.cPawns.append(self.cPawn)
+
+    def draw(self,screen,pawns):
+        i, grid, start = 0, 50, 100
+        for pawn in pawns:
+            screen.blit(pawn,(start,start + i * grid))
+            i += 1
 
 
 # pygame setup
@@ -80,6 +103,7 @@ FPS = pygame.time.Clock()
 def run():
     BOARD = Board()
     PLAYER = Player()
+    PAWN = Pawn()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -89,6 +113,8 @@ def run():
         screen.fill((0,0,0))
         BOARD.draw(screen)
         PLAYER.draw(screen)
+        PAWN.draw(PLAYER.get_playerField(),PAWN.pPawns)
+        PAWN.draw(PLAYER.get_computerField(),PAWN.cPawns)
         pygame.display.flip()
         deltaTime = FPS.tick(60) / 1000
 

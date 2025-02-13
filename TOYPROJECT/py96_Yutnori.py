@@ -94,9 +94,17 @@ class Board:
         self.bg_image = load_image('py96_bg.webp')
         self.bg_image.set_alpha(60)
         self.create_steps()
-        # 메인 루트: 인덱스 0~19, 19 다음은 도착(-2)
-        self.main_route = {i: i + 1 for i in range(19)}
-        self.main_route[19] = -2
+
+        self.main_route = {i: i + 1 for i in range(14)}
+        self.main_route[14] = 15  # 14 → 15 정상 연결
+        self.main_route[15] = 16  # 15 → 16로 연결 (분기 루트와 연결됨)
+        self.main_route[19] = 20  # 19번 이후 대각선으로 연결
+        self.main_route[20] = 21  
+        self.main_route[21] = 22  
+        self.main_route[22] = 23
+        self.main_route[23] = 24
+        self.main_route[24] = -2  # 24번 이후 도착지점
+
         # 분기 루트 매핑 (분기 선택 시 사용)
         # 예시: index 5에서 분기 선택(20)을 한 경우
         self.branch_routes = {
@@ -128,20 +136,33 @@ class Board:
         for _ in range(steps):
             if pos == -2:
                 return -2
-            pos = self.main_route.get(pos, -2)
+            if pos in self.special_steps:  # 분기점에서 특별 처리를 적용
+                pos = self.special_steps[pos][0]  # 기본적으로 첫 번째 경로 선택
+            else:
+                pos = self.main_route.get(pos, -2)
         return pos
+
     
     def calculate_branch_move(self, branch_start, steps):
         """ 분기 루트에서 branch_start 위치부터 steps만큼 이동한 후의 위치를 반환 """
         mapping = self.branch_routes.get(branch_start)
         if mapping is None:
-            return -2
+            return -2  # 분기 경로가 없으면 도착 처리
+        
         pos = branch_start
         for _ in range(steps):
             if pos == -2:
                 return -2
-            pos = mapping.get(pos, -2)
+            next_pos = mapping.get(pos, -2)
+            
+            # 🔥 15번에서는 메인 루트로 이어지는지 확인
+            if next_pos == 15 and 15 in self.main_route:
+                next_pos = self.main_route[15]  # 메인 루트로 연결
+            
+            pos = next_pos
         return pos
+
+
     
     def draw(self, screen):
         # 배경 패널 그리기 (원하는 색상이나 이미지로 수정 가능)
@@ -212,34 +233,33 @@ class Pawn:
             screen.blit(pawns[idx], (x, y))
     
     def move_pawn(self, idx, result, is_player=True):
-        """
-        선택한 말(idx)를 윷 결과(result)에 따라 이동.
-        만약 branch_choices에 분기 결정 값이 저장되어 있다면, 그 값을 기준으로 
-        '효과적인 이동거리' = (윷 결과 이동거리 - 1) 만큼만 이동하도록 계산.
-        """
         move_dict = {'백도!': -1, '도!': 1, '개!': 2, '걸!': 3, '윷!': 4, '모!': 5}
         move_steps = move_dict.get(result, 0)
-        
-        if is_player:
-            # 분기 결정 값이 저장되어 있다면, 그 값을 새로운 기준(base)으로 사용
-            if self.branch_choices[idx] is not None:
-                base = self.branch_choices[idx]
-                # 결과 이동이 양수이면 이미 분기 결정으로 진입한 효과가 있으므로 -1 보정
-                effective_steps = move_steps - 1 if move_steps > 0 else move_steps
-                new_pos = self.board.calculate_branch_move(base, effective_steps)
-                # 사용 후 branch 결정 값 초기화 (한 번만 적용)
-                self.branch_choices[idx] = None
-            else:
-                base = 0 if self.p_positions[idx] == -1 else self.p_positions[idx]
-                new_pos = self.board.calculate_main_move(base, move_steps)
-            self.p_positions[idx] = new_pos
-        else:
-            base = 0 if self.c_positions[idx] == -1 else self.c_positions[idx]
-            new_pos = self.board.calculate_main_move(base, move_steps)
-            self.c_positions[idx] = new_pos
 
-        print(f'윷 결과: {result}, {"플레이어" if is_player else "컴퓨터"} 말[{idx}]의 새 위치: {new_pos}')
+        if is_player:
+            positions = self.p_positions
+        else:
+            positions = self.c_positions
+
+        start_pos = positions[idx]
+
+        # 분기 선택이 되어 있는 경우 해당 branch_routes로 이동
+        if self.branch_choices[idx] is not None:
+            base = self.branch_choices[idx]
+            effective_steps = move_steps - 1 if move_steps > 0 else move_steps
+            new_pos = self.board.calculate_branch_move(base, effective_steps)
+            self.branch_choices[idx] = None  # 분기 선택 후 초기화
+        else:
+            base = 0 if start_pos == -1 else start_pos
+            if base in self.board.branch_routes:
+                new_pos = self.board.calculate_branch_move(base, move_steps)
+            else:
+                new_pos = self.board.calculate_main_move(base, move_steps)
+
+        positions[idx] = new_pos
+        print(f'말[{idx}] 이동: {start_pos} → {new_pos} ({result})')
         return new_pos
+
 
 
 
@@ -372,9 +392,9 @@ class YutnoriGame:
                             print(f"분기 선택: 말[{self.branch_pawn_index}]가 {option} 방향을 선택 (다음 이동에 적용)")
                             self.branch_selection = False
                             self.branch_options = []
+                            self.game_state.selecting_pawn = False
                             # 분기 선택 후에도 pawn 이동은 다음 윷 결과 시 진행되므로 selecting_pawn 상태는 유지
                             break
-
 
 
                 # 일반 말 선택 처리 (분기 UI가 활성화되어 있지 않을 때)
@@ -399,6 +419,7 @@ class YutnoriGame:
                             else:
                                 self.game_state.selecting_pawn = False
                             break
+
 
     def update(self):
         if self.holding_throw:

@@ -4,7 +4,7 @@ import pygame
 import sys
 
 S_WIDTH = 1280
-S_HEIGHT = 720
+S_HEIGHT = 800
 
 class Board():
     def __init__(self):
@@ -92,6 +92,18 @@ class Pawn():
             screen.blit(pawn,(start,start + i * grid))
             i += 1
 
+class Yut():
+    def __init__(self):
+        self.create_Yut()
+    
+    def create_Yut(self):
+        self.YutFronts = []
+        self.YutBacks = []
+        for i in range(4):
+            self.YutFront = pygame.image.load('TOYPROJECT\yutFront.png')
+            self.YutFronts.append(self.YutFront)
+            self.YutBack = pygame.image.load('TOYPROJECT\yutBack.png')
+            self.YutBacks.append(self.YutBack)
 
 # pygame setup
 pygame.init()

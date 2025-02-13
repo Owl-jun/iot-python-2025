@@ -98,7 +98,7 @@ class Pawn():
             i += 1
 
     def move(self,trigger):
-        moveDistance = 0
+        moveDistance = 80
         
     
 

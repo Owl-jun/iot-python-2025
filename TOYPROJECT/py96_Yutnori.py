@@ -129,6 +129,8 @@ class Board:
         # 분기 루트 매핑 (분기 선택 시 사용)
         # 예시: index 5에서 분기 선택(20)을 한 경우
         self.branch_routes = {
+            6: {6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12, 12: 13, 13: 14, 14: 15},
+            11: {11: 12, 12: 13, 13: 14, 14: 15},
             20: {20: 21, 21: 22, 22: 24, 24: 25, 25: 15},  # 분기: 20 → 21 → 22 → 23 → 24 → 15
             26: {26: 27, 27: 23, 23: 28, 28: 29, 29: -2},  # 분기: 25 → 26 → 27 → 28 -> 29
             24: {24: 25, 25: 15}
@@ -338,9 +340,9 @@ class Yut:
         elif back_count == 3:
             self.result_text = '걸!'
         elif back_count == 4:
-            self.result_text = '모!'
-        elif front_count == 4:
             self.result_text = '윷!'
+        elif front_count == 4:
+            self.result_text = '모!'
         text_surface = self.font.render(self.result_text, True, WHITE, BLACK)
         self.back_plate.blit(text_surface, (180, 0))
 

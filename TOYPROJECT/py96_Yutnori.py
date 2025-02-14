@@ -90,27 +90,48 @@ class Button:
 class Board:
     def __init__(self):
         self.steps = []
-        self.special_steps = {5: [6, 20], 10: [11, 25], 22: [23, 27]}
+        self.special_steps = {5: [6, 20], 10: [11, 26], 22: [24, 28]}
         self.bg_image = load_image('py96_bg.webp')
         self.bg_image.set_alpha(60)
         self.create_steps()
 
         self.main_route = {i: i + 1 for i in range(14)}
+        self.main_route[0] = 1
+        self.main_route[1] = 2
+        self.main_route[2] = 3
+        self.main_route[3] = 4
+        self.main_route[4] = 5
+        self.main_route[5] = 6
+        self.main_route[6] = 7
+        self.main_route[7] = 8
+        self.main_route[8] = 9
+        self.main_route[9] = 10
+        self.main_route[10] = 11
+        self.main_route[11] = 12
+        self.main_route[12] = 13
+        self.main_route[13] = 14
         self.main_route[14] = 15  # 14 → 15 정상 연결
         self.main_route[15] = 16  # 15 → 16로 연결 (분기 루트와 연결됨)
-        self.main_route[19] = 20  # 19번 이후 대각선으로 연결
+        self.main_route[16] = 17
+        self.main_route[17] = 18
+        self.main_route[18] = 19
+        self.main_route[19] = -2 
         self.main_route[20] = 21  
         self.main_route[21] = 22  
-        self.main_route[22] = 23
-        self.main_route[23] = 24
-        self.main_route[24] = -2  # 24번 이후 도착지점
-
+        self.main_route[22] = 24    # 우상단에서 내려오는 가운데 점
+        self.main_route[23] = 28    # 좌상단에서 내려오는 가운데 점
+        self.main_route[24] = 25
+        self.main_route[25] = 15
+        self.main_route[26] = 27
+        self.main_route[27] = 23
+        self.main_route[28] = 29
+        self.main_route[29] = -2
         # 분기 루트 매핑 (분기 선택 시 사용)
         # 예시: index 5에서 분기 선택(20)을 한 경우
         self.branch_routes = {
-            20: {20: 21, 21: 22, 22: 23, 23: 24, 24: 15},  # 분기: 20 → 21 → 22 → 23 → 24 → 15
-            25: {25: 26, 26: 27, 27: 15},                   # 분기: 25 → 26 → 27 → 15
-            27: {27: 28, 28: 15}                            # 분기: 27 → 28 → 15
+            20: {20: 21, 21: 22, 22: 24, 24: 25, 25: 15},  # 분기: 20 → 21 → 22 → 23 → 24 → 15
+            26: {26: 27, 27: 23, 23: 28, 28: 29, 29: -2},  # 분기: 25 → 26 → 27 → 28 -> 29
+            24: {24: 25, 25: 15}
         }
     
     def create_steps(self):
@@ -123,8 +144,8 @@ class Board:
             (4,0), (3,0), (2,0), (1,0), (0,0), (0,1),
             (0,2), (0,3), (0,4), (0,5), (1,5), (2,5),
             (3,5), (4,5), 
-            # 대각선 발판 좌표 (인덱스 20~28)
-            (4,1), (3.2,1.8), (2.5,2.5), (1.8,3.2), (1,4), (1,1), (1.8,1.8), (3.2,3.2), (4,4)
+            # 대각선 발판 좌표 (인덱스 20~29)
+            (4,1), (3.2,1.8), (2.5,2.5),(2.5,2.5), (1.8,3.2), (1,4), (1,1), (1.8,1.8), (3.2,3.2), (4,4)
         ]
         for x, y in self.positions:
             rect = pygame.Rect(start_x + (x * GRID_SIZE), start_y + (y * GRID_SIZE), 40, 40)
@@ -154,13 +175,14 @@ class Board:
             if pos == -2:
                 return -2
             next_pos = mapping.get(pos, -2)
-            
-            # 🔥 15번에서는 메인 루트로 이어지는지 확인
-            if next_pos == 15 and 15 in self.main_route:
-                next_pos = self.main_route[15]  # 메인 루트로 연결
-            
+
+            # 🔥 15번에서 메인 루트로 이어지는 문제 수정
+            if next_pos == 15 and next_pos not in mapping:
+                next_pos = self.main_route.get(15, -2)  # 메인 루트에서 찾기
+
             pos = next_pos
         return pos
+
 
 
     

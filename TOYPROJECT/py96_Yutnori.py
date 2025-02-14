@@ -162,7 +162,6 @@ class Board:
             else:
                 pos = self.main_route.get(pos, -2)
         return pos
-
     
     def calculate_branch_move(self, branch_start, steps):
         """ 분기 루트에서 branch_start 위치부터 steps만큼 이동한 후의 위치를 반환 """
@@ -182,9 +181,6 @@ class Board:
 
             pos = next_pos
         return pos
-
-
-
     
     def draw(self, screen):
         # 배경 패널 그리기 (원하는 색상이나 이미지로 수정 가능)

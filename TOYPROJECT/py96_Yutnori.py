@@ -95,7 +95,7 @@ class Board:
         self.bg_image.set_alpha(60)
         self.create_steps()
 
-        self.main_route = {i: i + 1 for i in range(14)}
+        self.main_route = {i: i + 1 for i in range(30)}
         self.main_route[0] = 1
         self.main_route[1] = 2
         self.main_route[2] = 3
@@ -110,12 +110,12 @@ class Board:
         self.main_route[11] = 12
         self.main_route[12] = 13
         self.main_route[13] = 14
-        self.main_route[14] = 15  # 14 → 15 정상 연결
-        self.main_route[15] = 16  # 15 → 16로 연결 (분기 루트와 연결됨)
+        self.main_route[14] = 15  
+        self.main_route[15] = 16  
         self.main_route[16] = 17
         self.main_route[17] = 18
         self.main_route[18] = 19
-        self.main_route[19] = -2 
+        self.main_route[19] = 30 
         self.main_route[20] = 21  
         self.main_route[21] = 22  
         self.main_route[22] = 24    # 우상단에서 내려오는 가운데 점
@@ -125,15 +125,15 @@ class Board:
         self.main_route[26] = 27
         self.main_route[27] = 23
         self.main_route[28] = 29
-        self.main_route[29] = -2
+        self.main_route[29] = 30
+        self.main_route[30] = -2
+
         # 분기 루트 매핑 (분기 선택 시 사용)
-        # 예시: index 5에서 분기 선택(20)을 한 경우
         self.branch_routes = {
             6: {6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12, 12: 13, 13: 14, 14: 15},
             11: {11: 12, 12: 13, 13: 14, 14: 15},
-            20: {20: 21, 21: 22, 22: 24, 24: 25, 25: 15},  # 분기: 20 → 21 → 22 → 23 → 24 → 15
-            26: {26: 27, 27: 23, 23: 28, 28: 29, 29: -2},  # 분기: 25 → 26 → 27 → 28 -> 29
-            24: {24: 25, 25: 15}
+            20: {20: 21, 21: 22, 22: 24, 24: 25, 25: 15},  
+            26: {26: 27, 27: 23, 23: 28, 28: 29, 29: 30},  
         }
     
     def create_steps(self):
@@ -147,7 +147,7 @@ class Board:
             (0,2), (0,3), (0,4), (0,5), (1,5), (2,5),
             (3,5), (4,5), 
             # 대각선 발판 좌표 (인덱스 20~29)
-            (4,1), (3.2,1.8), (2.5,2.5),(2.5,2.5), (1.8,3.2), (1,4), (1,1), (1.8,1.8), (3.2,3.2), (4,4)
+            (4,1), (3.2,1.8), (2.5,2.5),(2.5,2.5), (1.8,3.2), (1,4), (1,1), (1.8,1.8), (3.2,3.2), (4,4) , (5,5)
         ]
         for x, y in self.positions:
             rect = pygame.Rect(start_x + (x * GRID_SIZE), start_y + (y * GRID_SIZE), 40, 40)
@@ -156,6 +156,20 @@ class Board:
     def calculate_main_move(self, start, steps):
         """ 메인 루트에서 start 위치부터 steps만큼 이동한 후의 위치를 반환 """
         pos = start
+
+        if steps < 0:
+            for _ in range(abs(steps)):
+
+                if pos == 1:
+                    return 30
+
+                prev_pos = {v : k for k, v in self.main_route.items()}
+                if pos in prev_pos:
+                    pos = prev_pos[pos]
+                else:
+                    return -1
+            return pos
+
         for _ in range(steps):
             if pos == -2:
                 return -2
@@ -177,7 +191,7 @@ class Board:
                 return -2
             next_pos = mapping.get(pos, -2)
 
-            # 🔥 15번에서 메인 루트로 이어지는 문제 수정
+            # 15번에서 메인 루트로 이어지는 문제 수정
             if next_pos == 15 and next_pos not in mapping:
                 next_pos = self.main_route.get(15, -2)  # 메인 루트에서 찾기
 
@@ -185,7 +199,7 @@ class Board:
         return pos
     
     def draw(self, screen):
-        # 배경 패널 그리기 (원하는 색상이나 이미지로 수정 가능)
+        # 배경 패널 그리기
         pygame.draw.rect(screen, GRAY, self.back_panel)
         # 배경 이미지 그리기
         screen.blit(self.bg_image, (0, 0))
@@ -194,7 +208,9 @@ class Board:
             # 특별한 스텝은 다른 색상으로 표시 (예시)
             if idx in self.special_steps:
                 color = BROWN
-            else:
+            elif idx == 0 or idx == 15 or idx == 23 or idx == 30:
+                color = BROWN
+            else :
                 color = WHITE
             pygame.draw.rect(screen, color, rect, 0)
 
@@ -226,7 +242,7 @@ class PlayerUI:
 class Pawn:
     def __init__(self, board):
         self.board = board
-        self.p_positions = [-1] * 5  # -1: 필드, -2: 도착
+        self.p_positions = [-1] * 5  # -1: 대기중, -2: 도착
         self.c_positions = [-1] * 5
         self.pawn_images = {
             'player': [load_image('py96_pPawn.png') for _ in range(5)],
@@ -234,15 +250,41 @@ class Pawn:
         }
         # 각 말마다 분기 결정(방향) 정보를 기록 (None이면 아직 선택되지 않음)
         self.branch_choices = [None] * 5
+    
+    def count_pawns_at_position(self, is_player=True):
+        """ 각 위치에 몇 개의 말이 있는지 계산 """
+        positions = self.p_positions if is_player else self.c_positions
+        count = {}  # {위치: 개수} 형태의 딕셔너리
+
+        for pos in positions:
+            if pos not in count:
+                count[pos] = 0
+            count[pos] += 1  # 해당 위치의 말 개수 증가
+
+        return count
+
+
+    def get_grouped_pawns(self, pos, is_player=True):
+        """ 같은 위치에 있는 말(같은 팀)들의 인덱스를 반환 """
+        positions = self.p_positions if is_player else self.c_positions
+        return [idx for idx, p_pos in enumerate(positions) if p_pos == pos]
+
 
     def draw(self, screen, is_player=True):
         positions = self.p_positions if is_player else self.c_positions
         pawns = self.pawn_images['player'] if is_player else self.pawn_images['computer']
         base_x = 100 if is_player else SCREEN_WIDTH - 250
+        font = pygame.font.SysFont('malgungothic', 24)  # 숫자를 표시할 폰트
+
+        # 🔥 각 위치의 말 개수를 가져오기
+        pawn_counts = self.count_pawns_at_position(is_player)
+
+        # 🔥 말들을 먼저 그림
+        position_map = {}  # {위치: (x, y)} 좌표 저장
         for idx, pos in enumerate(positions):
-            if pos == -1:
+            if pos == -1:  # 필드에 있는 경우
                 x, y = base_x, 150 + idx * 60
-            elif pos == -2:
+            elif pos == -2:  # 도착한 말은 표시 안 함
                 continue
             else:
                 if pos < len(self.board.steps):
@@ -250,20 +292,48 @@ class Pawn:
                     x, y = rect.x, rect.y
                 else:
                     continue
+
+            # 🔥 말 이미지 출력
             screen.blit(pawns[idx], (x, y))
+            position_map[pos] = (x, y)  # 해당 위치의 좌표 저장
+
+        # 🔥 같은 위치에 2개 이상 말이 있는 경우, 숫자 표시
+        for pos, count in pawn_counts.items():
+            if count > 1 and pos in position_map and pos != -1:
+                x, y = position_map[pos]  # 해당 위치의 좌표 가져오기
+                text = font.render(str(count), True, (255, 255, 0))  # 노란색 숫자
+                text_rect = text.get_rect(center=(x + 20, y - 10))  # 위치 조정
+                screen.blit(text, text_rect)
     
     def move_pawn(self, idx, result, is_player=True):
         move_dict = {'백도!': -1, '도!': 1, '개!': 2, '걸!': 3, '윷!': 4, '모!': 5}
         move_steps = move_dict.get(result, 0)
 
-        if is_player:
-            positions = self.p_positions
-        else:
-            positions = self.c_positions
+        positions = self.p_positions if is_player else self.c_positions
 
         start_pos = positions[idx]
 
-        # 분기 선택이 되어 있는 경우 해당 branch_routes로 이동
+        if start_pos == -1:
+            new_pos = 0
+            positions[idx] = new_pos + move_steps
+            return new_pos
+
+        # 🔥 함께 이동할 말 찾기
+        grouped_pawns = self.get_grouped_pawns(start_pos, is_player)
+
+        # 🔥 백도 예외 처리 (출발 전에도 적용)
+        if move_steps == -1:
+            if start_pos == -1:
+                new_pos = -1  # 출발 전이라면 그대로 유지
+            else:
+                new_pos = self.board.calculate_main_move(start_pos, -1)
+            
+            for i in grouped_pawns:  # 🔥 함께 이동하는 모든 말을 적용
+                positions[i] = new_pos
+            print(f'말{grouped_pawns} 이동: {start_pos} → {new_pos} (백도!)')
+            return new_pos
+
+        # 🔥 분기 선택이 되어 있는 경우 해당 branch_routes로 이동
         if self.branch_choices[idx] is not None:
             base = self.branch_choices[idx]
             effective_steps = move_steps - 1 if move_steps > 0 else move_steps
@@ -276,9 +346,13 @@ class Pawn:
             else:
                 new_pos = self.board.calculate_main_move(base, move_steps)
 
-        positions[idx] = new_pos
-        print(f'말[{idx}] 이동: {start_pos} → {new_pos} ({result})')
+        # 🔥 같은 위치의 말들도 함께 이동하도록 적용
+        for i in grouped_pawns:
+            positions[i] = new_pos
+
+        print(f'말{grouped_pawns} 이동: {start_pos} → {new_pos} ({result})')
         return new_pos
+
 
 
 
